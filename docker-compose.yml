@@ -1,23 +1,22 @@
 services:
   backend:
     build: .
-    container_name: backend
+    container_name: devops_examen3_backend
     ports:
       - "3000:3000"
     environment:
       MY_DATABASE_DRIVER: postgres
-      DB_HOST: db
+      DB_HOST: db_examen3
       DB_USER_NAME: examen3
       DB_PASSWORD: examen3
       DB_NAME: db_examen
       DB_PORT: 5432
-
     depends_on:
-      - db
+      - db_examen3
 
-  db:
-    image: postgres:latest
-    container_name: db
+  db_examen3:
+    image: postgres:16
+    container_name: db_examen3
     environment:
       POSTGRES_USER: examen3
       POSTGRES_PASSWORD: examen3
@@ -25,7 +24,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ./data/postgres_data.sql:/docker-entrypoint-initdb.d/postgres_data.sql
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  postgres_data:
