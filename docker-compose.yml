@@ -1,6 +1,7 @@
 services:
   backend:
     build: .
+    image: jeffrey7101/devopsexamen3:latest
     container_name: devops_examen3_backend
     ports:
       - "3000:3000"
@@ -15,7 +16,7 @@ services:
       - db_examen3
 
   db_examen3:
-    image: postgres:16
+    image: postgres:17
     container_name: db_examen3
     environment:
       POSTGRES_USER: examen3
