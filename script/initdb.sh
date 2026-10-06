@@ -7,7 +7,7 @@ done
 
 mongosh --host mongo <<EOF
 use database
-db.usuarios.insertMany($(cat /data/data.json))
+db.usuarios.insertMany($(cat /data/mongo.json))
 EOF
 
 echo "Datos importados correctamente"
