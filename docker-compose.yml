@@ -1,0 +1,31 @@
+services:
+  backend:
+    build: .
+    container_name: backend
+    ports:
+      - "3000:3000"
+    environment:
+      MY_DATABASE_DRIVER: postgres
+      DB_HOST: db
+      DB_USER_NAME: examen3
+      DB_PASSWORD: examen3
+      DB_NAME: db_examen
+      DB_PORT: 5432
+
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_USER: examen3
+      POSTGRES_PASSWORD: examen3
+      POSTGRES_DB: db_examen
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
