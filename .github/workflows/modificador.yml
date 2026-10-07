@@ -1,0 +1,53 @@
+name: modificador
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource:
+        description: "Recurso de Kubernetes"
+        required: true
+        default: "backend"
+        type: string
+
+      driver:
+        description: "Driver de base de datos"
+        required: true
+        type: choice
+        options: #para seleccionar manualmente en el workflow
+          - postgres
+          - mysql
+          - mongo
+
+jobs:
+  modificar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: instalar doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+      - name: configurar kubernetes
+        run: |
+          doctl kubernetes cluster kubeconfig save devops-examen3
+
+      - name: cambiar driver
+        run: |
+          kubectl apply -f "k8s/configmap.${{ inputs.driver }}.yml"
+
+      - name: reiniciar recurso
+        run: |
+          kubectl rollout restart deployment/${{ inputs.resource }} -n node-dynamic
+
+      - name: esperar despliegue
+        run: |
+          kubectl rollout status deployment/${{ inputs.resource }} -n node-dynamic
+
+      - name: mostrar configuracion
+        run: |
+          kubectl get configmap backend-config -n node-dynamic -o yaml
+          kubectl get pods -n node-dynamic
