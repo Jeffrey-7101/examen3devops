@@ -1,2 +1,13 @@
 .env
 node_modules/
+
+# terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+
+# pyenv local
+.python-version
+
+k8s/aws-secret-local.yml
