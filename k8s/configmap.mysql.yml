@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: node-dynamic
+data:
+  MY_DATABASE_DRIVER: mysql
+  DB_HOST: mysql-service
+  DB_USER_NAME: examen3
+  DB_NAME: db_examen
+  DB_PORT: "3306"

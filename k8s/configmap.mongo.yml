@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: node-dynamic
+data:
+  MY_DATABASE_DRIVER: mongo
+  DB_HOST: mongo-service
+  DB_USER_NAME: examen3
+  DB_NAME: database
+  DB_PORT: "27017"
