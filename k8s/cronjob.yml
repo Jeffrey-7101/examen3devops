@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+  namespace: node-dynamic
+
+spec:
+  # ejecuta el backup cada 3 horas
+  schedule: "0 */3 * * *"
+
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: postgres-backup
+              image: jeffrey7101/devopsexamen3-backup:latest
+              imagePullPolicy: Always
+
+              env:
+                # conexión a postgres
+                - name: DB_HOST
+                  value: postgres-service
+
+                - name: DB_PORT
+                  value: "5432"
+
+                - name: DB_USER_NAME
+                  value: examen3
+
+                - name: DB_NAME
+                  value: db_examen
+
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: backend-secret
+                      key: DB_PASSWORD
+
+                # credenciales AWS
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-secret
+                      key: AWS_ACCESS_KEY_ID
+
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-secret
+                      key: AWS_SECRET_ACCESS_KEY
+
+                - name: AWS_DEFAULT_REGION
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-secret
+                      key: AWS_DEFAULT_REGION
+
+          restartPolicy: OnFailure
